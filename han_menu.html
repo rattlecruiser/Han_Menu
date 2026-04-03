@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>翰食堂 菜單</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --ink-light: #4a3f35;
+    --cream: #f7f3ed;
+    --paper: #fdfaf6;
+    --gold: #b8945a;
+    --gold-light: #d4aa72;
+    --red: #8b2e1a;
+    --border: #d6cbbf;
+    --section-bg: #f2ede5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: var(--ink);
+    color: var(--cream);
+    text-align: center;
+    padding: 3rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 40px,
+      rgba(184,148,90,0.04) 40px,
+      rgba(184,148,90,0.04) 41px
+    );
+  }
+  .header-inner { position: relative; z-index: 1; }
+  .header-en {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .header-logo {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 3.2rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .header-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .header-divider span { width: 60px; height: 1px; background: var(--gold); display: block; }
+  .header-divider i { color: var(--gold); font-size: 10px; }
+  .header-sub {
+    font-size: 12px;
+    color: rgba(247,243,237,0.5);
+    letter-spacing: 0.15em;
+  }
+  .header-info {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    font-size: 12px;
+    color: rgba(247,243,237,0.7);
+    letter-spacing: 0.05em;
+  }
+  .header-info span { display: flex; align-items: center; gap: 6px; }
+
+  /* Notice bar */
+  .notice {
+    background: var(--gold);
+    color: var(--ink);
+    text-align: center;
+    padding: 10px 1rem;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    line-height: 1.7;
+  }
+
+  /* Main layout */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* Category nav */
+  .cat-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .cat-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink-light);
+    padding: 6px 14px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .cat-btn:hover, .cat-btn.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  /* Menu grid */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+  }
+
+  /* Section */
+  .section {
+    background: var(--paper);
+    border: 1px solid var(--border);
+  }
+  .section-header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+  }
+  .section-title-en {
+    font-size: 10px;
+    color: var(--gold-light);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .section-body { padding: 4px 0; }
+
+  /* Item row */
+  .item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 9px 18px;
+    border-bottom: 1px solid rgba(214,203,191,0.4);
+    transition: background 0.15s;
+  }
+  .item:last-child { border-bottom: none; }
+  .item:hover { background: var(--section-bg); }
+  .item-name {
+    font-size: 13.5px;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    flex: 1;
+    line-height: 1.4;
+  }
+  .item-note {
+    font-size: 10.5px;
+    color: var(--gold);
+    margin-left: 6px;
+    white-space: nowrap;
+  }
+  .item-price {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    color: var(--red);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    margin-left: 12px;
+  }
+  .item-price::before { content: '$'; font-size: 11px; margin-right: 1px; }
+
+  /* Special section - drinks */
+  .section.drinks .section-header { background: #2c1f0e; }
+  .section.teishoku .section-header { background: #1a2c1a; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+  .footer-logo {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.3em;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .footer-info {
+    font-size: 12px;
+    color: var(--ink-light);
+    line-height: 2;
+    letter-spacing: 0.05em;
+  }
+  .footer-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    margin: 16px auto;
+  }
+
+  @media (max-width: 600px) {
+    .header-logo { font-size: 2.2rem; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .header-info { flex-direction: column; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <p class="header-en">Han Canteen · Japanese Cuisine</p>
+    <h1 class="header-logo">翰食堂</h1>
+    <div class="header-divider">
+      <span></span>
+      <i>✦</i>
+      <span></span>
+    </div>
+    <p class="header-sub">定食 · 燒烤 · 生魚片 · 壽司 · 揚物</p>
+    <div class="header-info">
+      <span>📍 竹北市華興五街107號</span>
+      <span>📞 03-656-8566</span>
+      <span>🕐 11:30–14:00 &nbsp;|&nbsp; 17:30–21:00</span>
+    </div>
+  </div>
+</header>
+
+<div class="notice">
+  每人內用需低消230元 · 120公分以下兒童無限制 · 用餐時間限時90分鐘<br>
+  免費無限續用味噌湯／飲料／白飯 · 小菜、甜點依季節性或供應狀況調整供應 · 本店免服務費 · 店內禁帶外食
+</div>
+
+<div class="container">
+
+  <nav class="cat-nav" id="catNav">
+    <button class="cat-btn active" onclick="filterAll()">全部</button>
+    <button class="cat-btn" onclick="filterCat('sashimi')">刺身</button>
+    <button class="cat-btn" onclick="filterCat('temaki')">手卷／蘿蔔卷</button>
+    <button class="cat-btn" onclick="filterCat('sushi')">壽司</button>
+    <button class="cat-btn" onclick="filterCat('gunkan')">軍艦／生丼</button>
+    <button class="cat-btn" onclick="filterCat('yakimono')">烤物</button>
+    <button class="cat-btn" onclick="filterCat('agemono')">炸物</button>
+    <button class="cat-btn" onclick="filterCat('mushimono')">蒸物</button>
+    <button class="cat-btn" onclick="filterCat('teishoku')">定食</button>
+    <button class="cat-btn" onclick="filterCat('curry')">咖哩</button>
+    <button class="cat-btn" onclick="filterCat('drinks')">飲品</button>
+    <button class="cat-btn" onclick="filterCat('misc')">珍味</button>
+  </nav>
+
+  <div class="menu-grid" id="menuGrid">
+
+    <!-- 刺身 -->
+    <div class="section" data-cat="sashimi">
+      <div class="section-header">
+        <span class="section-title">刺　身</span>
+        <span class="section-title-en">Sashimi</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">鮭魚生魚片 <span class="item-note">6片</span></span><span class="item-price">270</span></div>
+        <div class="item"><span class="item-name">鮭魚生魚片 <span class="item-note">12片</span></span><span class="item-price">530</span></div>
+        <div class="item"><span class="item-name">鮭魚魚肚生魚片 <span class="item-note">限量 5片</span></span><span class="item-price">320</span></div>
+        <div class="item"><span class="item-name">鮭魚魚肚生魚片 <span class="item-note">限量 10片</span></span><span class="item-price">630</span></div>
+        <div class="item"><span class="item-name">海鰻生魚片 <span class="item-note">5片</span></span><span class="item-price">260</span></div>
+        <div class="item"><span class="item-name">海鰻生魚片 <span class="item-note">10片</span></span><span class="item-price">510</span></div>
+        <div class="item"><span class="item-name">綜合生魚片 <span class="item-note">6片</span></span><span class="item-price">280</span></div>
+        <div class="item"><span class="item-name">綜合生魚片 <span class="item-note">12片</span></span><span class="item-price">550</span></div>
+        <div class="item"><span class="item-name">綜合魚肚生魚片 <span class="item-note">限量 5片</span></span><span class="item-price">320</span></div>
+        <div class="item"><span class="item-name">綜合魚肚生魚片 <span class="item-note">限量 10片</span></span><span class="item-price">630</span></div>
+      </div>
+    </div>
+
+    <!-- 手卷 + 蘿蔔卷 -->
+    <div class="section" data-cat="temaki">
+      <div class="section-header">
+        <span class="section-title">手　卷</span>
+        <span class="section-title-en">Temaki Roll</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">藍筍手卷</span><span class="item-price">70</span></div>
+        <div class="item"><span class="item-name">鮮蝦手卷</span><span class="item-price">80</span></div>
+        <div class="item"><span class="item-name">鮮蝦蘆筍手卷</span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">炸蝦手卷</span><span class="item-price">80</span></div>
+        <div class="item"><span class="item-name">炙燒比目鰻手卷</span><span class="item-price">100</span></div>
+        <div class="item"><span class="item-name">炙燒比目魚手卷</span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">鮭魚卵手卷</span><span class="item-price">140</span></div>
+        <div class="item"><span class="item-name">松葉蟹手卷</span><span class="item-price">100</span></div>
+      </div>
+    </div>
+
+    <!-- 蘿蔔卷 -->
+    <div class="section" data-cat="temaki">
+      <div class="section-header">
+        <span class="section-title">蘿蔔卷</span>
+        <span class="section-title-en">Daikon Roll</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">炸蝦蘿蔔卷</span><span class="item-price">100</span></div>
+        <div class="item"><span class="item-name">牡蠣蘿蔔卷 <span class="item-note">2顆</span></span><span class="item-price">100</span></div>
+        <div class="item"><span class="item-name">蘿蔔散壽司（生）</span><span class="item-price">180</span></div>
+      </div>
+    </div>
+
+    <!-- 壽司卷 -->
+    <div class="section" data-cat="sushi">
+      <div class="section-header">
+        <span class="section-title">壽司卷</span>
+        <span class="section-title-en">Sushi Roll</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">軟殼蟹壽司 <span class="item-note">4顆</span></span><span class="item-price">230</span></div>
+        <div class="item"><span class="item-name">炸蝦壽司 <span class="item-note">6顆</span></span><span class="item-price">200</span></div>
+        <div class="item"><span class="item-name">鮭魚壽司卷 <span class="item-note">6顆 生</span></span><span class="item-price">290</span></div>
+        <div class="item"><span class="item-name">焦糖鮭魚壽司卷 <span class="item-note">6顆 生</span></span><span class="item-price">290</span></div>
+        <div class="item"><span class="item-name">起司鮭魚壽司捲 <span class="item-note">6顆 生</span></span><span class="item-price">330</span></div>
+        <div class="item"><span class="item-name">鮭魚炸壽司 <span class="item-note">4顆 生</span></span><span class="item-price">150</span></div>
+        <div class="item"><span class="item-name">鮭魚炸壽司 <span class="item-note">4顆 熟</span></span><span class="item-price">150</span></div>
+        <div class="item"><span class="item-name">豆皮壽司 <span class="item-note">2顆</span></span><span class="item-price">40</span></div>
+      </div>
+    </div>
+
+    <!-- 焗烤壽司披薩 -->
+    <div class="section" data-cat="sushi">
+      <div class="section-header">
+        <span class="section-title">焗烤壽司披薩</span>
+        <span class="section-title-en">Baked Sushi Pizza</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">龍蝦沙拉壽司披薩</span><span class="item-price">200</span></div>
+        <div class="item"><span class="item-name">泡菜炸雞壽司披薩</span><span class="item-price">230</span></div>
+        <div class="item"><span class="item-name">大阪燒炸雞壽司披薩</span><span class="item-price">230</span></div>
+      </div>
+    </div>
+
+    <!-- 握壽司 -->
+    <div class="section" data-cat="sushi">
+      <div class="section-header">
+        <span class="section-title">握壽司</span>
+        <span class="section-title-en">Nigiri Sushi</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">綜合握壽司 <span class="item-note">5貫</span></span><span class="item-price">300</span></div>
+        <div class="item"><span class="item-name">鮭魚肚握壽司 <span class="item-note">2貫</span></span><span class="item-price">180</span></div>
+        <div class="item"><span class="item-name">海鰻握壽司 <span class="item-note">2貫</span></span><span class="item-price">170</span></div>
+        <div class="item"><span class="item-name">比目魚握壽司 <span class="item-note">2貫</span></span><span class="item-price">160</span></div>
+        <div class="item"><span class="item-name">干貝握壽司 <span class="item-note">2貫</span></span><span class="item-price">180</span></div>
+        <div class="item"><span class="item-name">鮪魚握壽司 <span class="item-note">2貫</span></span><span class="item-price">150</span></div>
+        <div class="item"><span class="item-name">花枝握壽司 <span class="item-note">2貫</span></span><span class="item-price">130</span></div>
+        <div class="item"><span class="item-name">星鰻握壽司 <span class="item-note">1貫</span></span><span class="item-price">100</span></div>
+        <div class="item"><span class="item-name">天使紅蝦蟹膏 <span class="item-note">1貫</span></span><span class="item-price">100</span></div>
+        <div class="item"><span class="item-name">玉子燒握壽司 <span class="item-note">2貫</span></span><span class="item-price">70</span></div>
+      </div>
+    </div>
+
+    <!-- 軍艦 -->
+    <div class="section" data-cat="gunkan">
+      <div class="section-header">
+        <span class="section-title">軍　艦</span>
+        <span class="section-title-en">Gunkan</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">鮭魚卵軍艦 <span class="item-note">2貫</span></span><span class="item-price">195</span></div>
+        <div class="item"><span class="item-name">鮭魚肚親子軍艦 <span class="item-note">2貫</span></span><span class="item-price">240</span></div>
+        <div class="item"><span class="item-name">甜蝦軍艦 <span class="item-note">2貫</span></span><span class="item-price">120</span></div>
+        <div class="item"><span class="item-name">蟹肉軍艦 <span class="item-note">2貫</span></span><span class="item-price">130</span></div>
+        <div class="item"><span class="item-name">龍蝦沙拉軍艦 <span class="item-note">2貫</span></span><span class="item-price">80</span></div>
+        <div class="item"><span class="item-name">肉鬆軍艦 <span class="item-note">2貫</span></span><span class="item-price">90</span></div>
+      </div>
+    </div>
+
+    <!-- 生丼 -->
+    <div class="section" data-cat="gunkan">
+      <div class="section-header">
+        <span class="section-title">生　丼</span>
+        <span class="section-title-en">Seafood Don</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">鮭魚丼 刺身</span><span class="item-price">350</span></div>
+        <div class="item"><span class="item-name">鮭魚丼 魚肚 <span class="item-note">限量</span></span><span class="item-price">390</span></div>
+        <div class="item"><span class="item-name">鮭魚親子丼 刺身</span><span class="item-price">430</span></div>
+        <div class="item"><span class="item-name">鮭魚親子丼 魚肚 <span class="item-note">限量</span></span><span class="item-price">490</span></div>
+        <div class="item"><span class="item-name">綜合海鮮丼</span><span class="item-price">400</span></div>
+        <div class="item"><span class="item-name">特級海鮮丼</span><span class="item-price">450</span></div>
+        <div class="item"><span class="item-name">究極海鮮丼</span><span class="item-price">670</span></div>
+        <div class="item"><span class="item-name">鮭魚卵干貝丼</span><span class="item-price">480</span></div>
+        <div class="item"><span class="item-name">鮮鮭魚卵丼</span><span class="item-price">400</span></div>
+        <div class="item"><span class="item-name">蟹肉比目魚丼</span><span class="item-price">450</span></div>
+        <div class="item"><span class="item-name">比目魚星鰻穴子丼</span><span class="item-price">470</span></div>
+        <div class="item"><span class="item-name">溫泉蔥蔥花鮪魚丼</span><span class="item-price">460</span></div>
+        <div class="item"><span class="item-name">鈴鹿散壽司丼</span><span class="item-price">410</span></div>
+      </div>
+    </div>
+
+    <!-- 烤物 -->
+    <div class="section" data-cat="yakimono">
+      <div class="section-header">
+        <span class="section-title">烤　物</span>
+        <span class="section-title-en">Yakimono</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">香辣雞翅 <span class="item-note">3隻</span></span><span class="item-price">150</span></div>
+        <div class="item"><span class="item-name">鹽烤鮪魚</span><span class="item-price">180</span></div>
+        <div class="item"><span class="item-name">鹽烤牛角一夜干</span><span class="item-price">340</span></div>
+        <div class="item"><span class="item-name">柚香雞腿</span><span class="item-price">190</span></div>
+        <div class="item"><span class="item-name">秘汁香料豬排</span><span class="item-price">200</span></div>
+        <div class="item"><span class="item-name">胡麻 松阪豬</span><span class="item-price">260</span></div>
+        <div class="item"><span class="item-name">照燒 松阪豬</span><span class="item-price">260</span></div>
+        <div class="item"><span class="item-name">鹽烤中卷 <span class="item-note">1尾</span></span><span class="item-price">330</span></div>
+        <div class="item"><span class="item-name">鹽烤海大蝦 <span class="item-note">2隻</span></span><span class="item-price">260</span></div>
+        <div class="item"><span class="item-name">鹽烤雞腿串 <span class="item-note">2串</span></span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">照燒雞腿串 <span class="item-note">2串</span></span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">蔥鹽雞腿串 <span class="item-note">2串</span></span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">秘汁 雞腿串 <span class="item-note">2串</span></span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">明太子 雞腿串 <span class="item-note">2串</span></span><span class="item-price">100</span></div>
+        <div class="item"><span class="item-name">柚子胡椒 雞腿串 <span class="item-note">2串</span></span><span class="item-price">100</span></div>
+        <div class="item"><span class="item-name">照燒翼板牛排</span><span class="item-price">270</span></div>
+        <div class="item"><span class="item-name">剝皮辣椒雞腿捲</span><span class="item-price">270</span></div>
+        <div class="item"><span class="item-name">照燒香菇串 <span class="item-note">2串</span></span><span class="item-price">70</span></div>
+        <div class="item"><span class="item-name">奶油玉米串 <span class="item-note">2串</span></span><span class="item-price">95</span></div>
+        <div class="item"><span class="item-name">鹽烤奶油柳橙瓜 <span class="item-note">2串</span></span><span class="item-price">110</span></div>
+        <div class="item"><span class="item-name">烤帶殼玉米筍 <span class="item-note">3根</span></span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">鹽烤杏鮑菇</span><span class="item-price">80</span></div>
+        <div class="item"><span class="item-name">泡菜燒肉</span><span class="item-price">180</span></div>
+        <div class="item"><span class="item-name">醬油 烤糰子 <span class="item-note">1串</span></span><span class="item-price">60</span></div>
+        <div class="item"><span class="item-name">煉乳 烤糰子 <span class="item-note">1串</span></span><span class="item-price">60</span></div>
+        <div class="item"><span class="item-name">黑糖 烤糰子 <span class="item-note">1串</span></span><span class="item-price">60</span></div>
+      </div>
+    </div>
+
+    <!-- 炸物 -->
+    <div class="section" data-cat="agemono">
+      <div class="section-header">
+        <span class="section-title">炸　物</span>
+        <span class="section-title-en">Agemono</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">炸豬排</span><span class="item-price">170</span></div>
+        <div class="item"><span class="item-name">唐揚炸雞</span><span class="item-price">180</span></div>
+        <div class="item"><span class="item-name">起司可樂餅</span><span class="item-price">70</span></div>
+        <div class="item"><span class="item-name">野菜可樂餅</span><span class="item-price">60</span></div>
+        <div class="item"><span class="item-name">揚出豆腐</span><span class="item-price">80</span></div>
+        <div class="item"><span class="item-name">大阪燒豆腐</span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">炸薯條</span><span class="item-price">70</span></div>
+        <div class="item"><span class="item-name">酥炸白竹莢魚 <span class="item-note">2塊</span></span><span class="item-price">110</span></div>
+        <div class="item"><span class="item-name">酥炸白身魚 <span class="item-note">2塊</span></span><span class="item-price">100</span></div>
+        <div class="item"><span class="item-name">酥炸杏鮑菇</span><span class="item-price">70</span></div>
+        <div class="item"><span class="item-name">炸蝦天婦羅</span><span class="item-price">220</span></div>
+        <div class="item"><span class="item-name">炸豬排軟骨</span><span class="item-price">200</span></div>
+        <div class="item"><span class="item-name">酥炸中卷</span><span class="item-price">200</span></div>
+        <div class="item"><span class="item-name">酥炸雞軟骨</span><span class="item-price">100</span></div>
+        <div class="item"><span class="item-name">酥炸牡蠣 <span class="item-note">4顆</span></span><span class="item-price">180</span></div>
+      </div>
+    </div>
+
+    <!-- 蒸物 -->
+    <div class="section" data-cat="mushimono">
+      <div class="section-header">
+        <span class="section-title">蒸　物</span>
+        <span class="section-title-en">Mushimono</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">什錦茶碗蒸</span><span class="item-price">70</span></div>
+        <div class="item"><span class="item-name">鮭魚卵茶碗蒸</span><span class="item-price">140</span></div>
+        <div class="item"><span class="item-name">松露茶碗蒸</span><span class="item-price">140</span></div>
+        <div class="item"><span class="item-name">土瓶蒸</span><span class="item-price">100</span></div>
+        <div class="item"><span class="item-name">鮑魚茶碗蒸</span><span class="item-price">140</span></div>
+      </div>
+    </div>
+
+    <!-- 沙拉 + 明太子 -->
+    <div class="section" data-cat="misc">
+      <div class="section-header">
+        <span class="section-title">沙拉／明太子</span>
+        <span class="section-title-en">Salad / Mentaiko</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">野菜沙拉</span><span class="item-price">180</span></div>
+        <div class="item"><span class="item-name">燻鮭魚沙拉</span><span class="item-price">230</span></div>
+        <div class="item"><span class="item-name">炸魚沙拉</span><span class="item-price">230</span></div>
+        <div class="item"><span class="item-name">燒肉沙拉</span><span class="item-price">220</span></div>
+        <div class="item"><span class="item-name">和風魚肝洋蔥沙拉</span><span class="item-price">230</span></div>
+        <div class="item"><span class="item-name">明太子馬鈴薯 <span class="item-note">5片</span></span><span class="item-price">230</span></div>
+        <div class="item"><span class="item-name">明太子山藥 <span class="item-note">5片</span></span><span class="item-price">230</span></div>
+      </div>
+    </div>
+
+    <!-- 珍味 -->
+    <div class="section" data-cat="misc">
+      <div class="section-header">
+        <span class="section-title">珍　味</span>
+        <span class="section-title-en">Specialty</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">和風鮭魚卵山藥細麵</span><span class="item-price">180</span></div>
+        <div class="item"><span class="item-name">溫泉水</span><span class="item-price">40</span></div>
+        <div class="item"><span class="item-name">糖心蛋</span><span class="item-price">40</span></div>
+        <div class="item"><span class="item-name">黑豆</span><span class="item-price">65</span></div>
+        <div class="item"><span class="item-name">山葵章魚</span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">牛蒡大根</span><span class="item-price">60</span></div>
+        <div class="item"><span class="item-name">手工泡菜</span><span class="item-price">65</span></div>
+      </div>
+    </div>
+
+    <!-- 時蔬 -->
+    <div class="section" data-cat="misc">
+      <div class="section-header">
+        <span class="section-title">時　蔬</span>
+        <span class="section-title-en">Seasonal Veg</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">鮮菇炒水蓮</span><span class="item-price">150</span></div>
+      </div>
+    </div>
+
+    <!-- 烤物定食 -->
+    <div class="section teishoku" data-cat="teishoku">
+      <div class="section-header">
+        <span class="section-title">烤物定食</span>
+        <span class="section-title-en">Grilled Set</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">胡麻松阪豬定食</span><span class="item-price">360</span></div>
+        <div class="item"><span class="item-name">秘汁香料烤豬排定食</span><span class="item-price">350</span></div>
+        <div class="item"><span class="item-name">薑汁燒肉定食（豬肉）</span><span class="item-price">290</span></div>
+        <div class="item"><span class="item-name">泡菜燒肉定食（豬肉）</span><span class="item-price">290</span></div>
+        <div class="item"><span class="item-name">鹽烤鮪魚定食</span><span class="item-price">340</span></div>
+        <div class="item"><span class="item-name">鹽烤牛仔魚一夜干定食 <span class="item-note">1尾</span></span><span class="item-price">460</span></div>
+        <div class="item"><span class="item-name">照燒鯛魚定食 <span class="item-note">1尾</span></span><span class="item-price">660</span></div>
+        <div class="item"><span class="item-name">柚香雞腿定食</span><span class="item-price">350</span></div>
+        <div class="item"><span class="item-name">剝皮辣椒雞腿捲定食</span><span class="item-price">370</span></div>
+        <div class="item"><span class="item-name">醬燒骰子牛定食</span><span class="item-price">390</span></div>
+        <div class="item"><span class="item-name">照燒翼板牛排定食</span><span class="item-price">380</span></div>
+      </div>
+    </div>
+
+    <!-- 炸物定食 -->
+    <div class="section teishoku" data-cat="teishoku">
+      <div class="section-header">
+        <span class="section-title">炸物定食</span>
+        <span class="section-title-en">Fried Set</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">炸豬排定食</span><span class="item-price">340</span></div>
+        <div class="item"><span class="item-name">唐揚炸雞定食</span><span class="item-price">340</span></div>
+        <div class="item"><span class="item-name">炸蝦天婦羅定食</span><span class="item-price">360</span></div>
+        <div class="item"><span class="item-name">炸魚定食 <span class="item-note">當日限量</span></span><span class="item-price">360</span></div>
+      </div>
+    </div>
+
+    <!-- 手工製製咖哩定食 -->
+    <div class="section teishoku" data-cat="curry">
+      <div class="section-header">
+        <span class="section-title">手工製咖哩定食</span>
+        <span class="section-title-en">Curry Set</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">炸豬排咖哩</span><span class="item-price">380</span></div>
+        <div class="item"><span class="item-name">唐揚炸雞咖哩</span><span class="item-price">390</span></div>
+        <div class="item"><span class="item-name">牛排咖哩</span><span class="item-price">430</span></div>
+      </div>
+    </div>
+
+    <!-- 酒精飲料 -->
+    <div class="section drinks" data-cat="drinks">
+      <div class="section-header">
+        <span class="section-title">酒精飲料</span>
+        <span class="section-title-en">Alcoholic Drinks</span>
+      </div>
+      <div class="section-body">
+        <div class="item"><span class="item-name">白鹿清酒 冰/溫 <span class="item-note">250ml</span></span><span class="item-price">200</span></div>
+        <div class="item"><span class="item-name">小山本家清酒 瓶 <span class="item-note">300ml</span></span><span class="item-price">280</span></div>
+        <div class="item"><span class="item-name">獺祭45 瓶 <span class="item-note">300ml</span></span><span class="item-price">660</span></div>
+        <div class="item"><span class="item-name">本格梅酒 杯 <span class="item-note">200ml</span></span><span class="item-price">150</span></div>
+        <div class="item"><span class="item-name">朝日啤酒 罐 <span class="item-note">330ml</span></span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">可樂娜啤酒 瓶 <span class="item-note">330ml</span></span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">水蜜桃沙瓦 杯 <span class="item-note">350ml</span></span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">Sour3梅子沙瓦 杯 <span class="item-note">350ml</span></span><span class="item-price">90</span></div>
+        <div class="item"><span class="item-name">可爾必思 罐 <span class="item-note">310ml</span></span><span class="item-price">40</span></div>
+      </div>
+    </div>
+
+  </div><!-- /menu-grid -->
+
+  <footer class="footer">
+    <p class="footer-logo">翰食堂</p>
+    <div class="footer-divider"></div>
+    <p class="footer-info">
+      竹北市華興五街107號 &nbsp;｜&nbsp; 03-656-8566<br>
+      週一公休 &nbsp;｜&nbsp; 午餐 11:30–14:00 &nbsp;｜&nbsp; 晚餐 17:30–21:00<br>
+      本店免服務費 · 店內禁帶外食
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  function filterAll() {
+    document.querySelectorAll('.section').forEach(s => s.style.display = '');
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+  function filterCat(cat) {
+    document.querySelectorAll('.section').forEach(s => {
+      s.style.display = s.dataset.cat === cat ? '' : 'none';
+    });
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
